@@ -1,7 +1,5 @@
-# treehouse_u3_interactive_form
-This is the project page for Treehouse's Fullstack JavaScript Tech Degree Unit 3's Interactive Form project. It involves HTML, CSS, and JavaScript. Processes will be documented below. Starting files were downloaded from Team Treehouse's website.
-
 # Interactive Form
+This is the project page for Treehouse's Fullstack JavaScript Tech Degree Unit 3's Interactive Form project. It involves HTML, CSS, and JavaScript. Processes will be documented below. Starting files were downloaded from Team Treehouse's website.
 
 ## Grading
 *I'm submitting for exceeds expectations or needs work.*
