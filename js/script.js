@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const otherJobInput = document.getElementById('other-job-role')
 
   //t-shirt info
-  const shirtDesignSelect = document.getElementById('desing')
+  const shirtDesignSelect = document.getElementById('design')
   const shirtColorSelect = document.getElementById('color')
   const colorOptions = shirtColorSelect.children
 
@@ -62,6 +62,34 @@ document.addEventListener('DOMContentLoaded', () => {
   // =====================
   // 3. T-Shirt Section
   // =====================
+
+  //disable color menu by default
+  shirtColorSelect.disabled = true
+
+  //when a theme is selected
+  shirtDesignSelect.addEventListener('change', (e) => {
+    const selectedTheme = e.target.value
+
+    //enable color select menu
+    shirtColorSelect.disabled = false
+
+    //track if we've found and selected the first valid option
+    let firstMatchSelected = false
+
+    //show/hide color option based on selected theme
+    colorOptions.forEach((option) => {
+      if (option.getAttribute('data-theme') === selectedTheme) {
+        option.hidden = false
+        if (!firstMatchSelected) {
+          option.selected = true
+          firstMatchSelected = true
+        }
+      } else {
+        option.hidden = true
+        option.selected = false
+      }
+    })
+  })
 
   // =====================
   // 4. Register for Activities Section
