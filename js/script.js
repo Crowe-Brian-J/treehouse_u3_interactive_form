@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     'input[type="checkbox"]'
   )
   const activitiesCostDisplay = document.getElementById('activities-cost')
+  const activitiesHint = document.getElementById('activities-hint')
 
   //payment info
   const paymentSelect = document.getElementById('payment')
@@ -190,6 +191,67 @@ document.addEventListener('DOMContentLoaded', () => {
   // =====================
   // 6. Form Validation (On Submit)
   // =====================
+
+  //helper functions to show and clear errors
+  const showError = (element) => {
+    //add error-border class to element and show hint message
+    element.classList.add('error-border')
+
+    //determine if error element is in activities field
+    if (element === activitiesFieldset) {
+      activitiesCostDisplay.classList.add('error-border')
+      activitiesHint.style.display = 'block'
+    } else {
+      const hint = element.nextElementSibling
+      if (hint && hint.classList.contains('hint')) {
+        hint.style.display = 'block'
+      }
+    }
+  }
+
+  const clearError = (element) => {
+    element.classList.remove('error')
+    const hint = element.nextElementSibling
+    if (hint && hint.classList.contains('hint')) {
+      hint.style.display = 'none'
+    }
+  }
+
+  form.addEventListener('submit', (e) => {
+    //clear previous error states
+    let isFormValid = true
+
+    //name validation
+    if (nameInput.value.trim() === '') {
+      showError(nameInput)
+      isFormValid = false
+    } else {
+      clearError(nameInput)
+    }
+
+    //email validation
+    const emailRegex = /^[^@]+@[^@.]+\.[a-z]+$/i
+    if (!emailRegex.test(emailInput.value.trim())) {
+      showError(emailInput)
+      isFormValid = false
+    } else {
+      clearError(emailInput)
+    }
+
+    //activities validation (at least one)
+    const isActivityChecked = Array.from(activitiesCheckboxes).some(
+      (cb) => cb.checked
+    )
+
+    if (!isActivityChecked) {
+      showError(activitiesFieldset)
+      isFormValid = false
+    } else {
+      clearError(activitiesFieldset)
+    }
+
+    //payment validation
+  })
 
   // =====================
   // 7. Real-Time Validation (Exceeds Expectations)
