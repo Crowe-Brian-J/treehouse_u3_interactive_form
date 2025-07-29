@@ -39,11 +39,25 @@ document.addEventListener('DOMContentLoaded', () => {
   // =====================
   // 1. Name Field Auto-Focus
   // =====================
+
+  //autofocus on name input per grading rubric/instructions
   nameInput.focus()
 
   // =====================
   // 2. Job Role Section
   // =====================
+
+  //hide other job role input on initial load
+  otherJobInput.style.display = 'none'
+
+  //listen for changes on the job role dropdown
+  jobRoleSelect.addEventListener('change', (e) => {
+    if (e.target.value === 'other') {
+      otherJobInput.style.display = 'block'
+    } else {
+      otherJobInput.style.display = 'none'
+    }
+  })
 
   // =====================
   // 3. T-Shirt Section
