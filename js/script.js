@@ -76,20 +76,26 @@ document.addEventListener('DOMContentLoaded', () => {
     //track if we've found and selected the first valid option
     let firstMatchSelected = false
 
-    console.log(colorOptions)
     //show/hide color option based on selected theme
-    colorOptions.forEach((option) => {
-      if (option.getAttribute('data-theme') === selectedTheme) {
+    for (let i = 0; i < colorOptions.length; i++) {
+      const option = colorOptions[i]
+      const theme = option.getAttribute('data-theme')
+
+      if (theme === selectedTheme) {
+        //show available options
         option.hidden = false
+        option.disabled = false
         if (!firstMatchSelected) {
           option.selected = true
           firstMatchSelected = true
         }
       } else {
+        //hide other options
         option.hidden = true
+        option.disabled = true
         option.selected = false
       }
-    })
+    }
   })
 
   // =====================
