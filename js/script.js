@@ -161,33 +161,30 @@ document.addEventListener('DOMContentLoaded', () => {
   //set cc as default payment option
   paymentSelect.value = 'credit-card'
 
-  //show credit card section, hide Paypal and Bitcoin
-  creditCardDiv.style.display = 'block'
-  paypalDiv.style.display = 'none'
-  bitcoinDiv.style.display = 'none'
+  //map payment method IDs to their div elements
+  const paymentSections = {
+    'credit-card': creditCardDiv,
+    paypal: paypalDiv,
+    bitcoin: bitcoinDiv
+  }
+
+  //helper function to DRY up code
+  const showPaymentSection = (selectedMethod) => {
+    for (const method in paymentSections) {
+      if (method === selectedMethod) {
+        paymentSections[method].style.display = 'block'
+      } else {
+        paymentSections[method].style.display = 'none'
+      }
+    }
+  }
+
+  //show default payment selection on page load
+  showPaymentSection(paymentSelect.value)
 
   //listen for the changes
   paymentSelect.addEventListener('change', (e) => {
-    const paymentMethod = e.target.value
-
-    if (paymentMethod === 'credit-card') {
-      creditCardDiv.style.display = 'block'
-      paypalDiv.style.display = 'none'
-      bitcoinDiv.style.display = 'none'
-    } else if (paymentMethod === 'paypal') {
-      creditCardDiv.style.display = 'none'
-      paypalDiv.style.display = 'block'
-      bitcoinDiv.style.display = 'none'
-    } else if (paymentMethod === 'bitcoin') {
-      creditCardDiv.style.display = 'none'
-      paypalDiv.style.display = 'none'
-      bitcoinDiv.style.display = 'block'
-    } else {
-      //in case someone selects the 'Select Payment Method' option
-      creditCardDiv.style.display = 'none'
-      paypalDiv.style.display = 'none'
-      bitcoinDiv.style.display = 'none'
-    }
+    showPaymentSection(e.target.value)
   })
 
   // =====================
