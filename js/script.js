@@ -76,6 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //track if we've found and selected the first valid option
     let firstMatchSelected = false
 
+    console.log(colorOptions)
     //show/hide color option based on selected theme
     colorOptions.forEach((option) => {
       if (option.getAttribute('data-theme') === selectedTheme) {
@@ -94,6 +95,58 @@ document.addEventListener('DOMContentLoaded', () => {
   // =====================
   // 4. Register for Activities Section
   // =====================
+
+  //set initial cost at 0 - allow additions
+  let totalCost = 0
+
+  //start listening
+  activitiesFieldset.addEventListener('change', (e) => {
+    //find clicked
+    const clicked = e.target
+    const clickedTime = clicked.getAttribute('data-day-and-time')
+    const cost = parseInt(clicked.getAttribute('data-cost'))
+
+    //update totalCost
+    if (clicked.checked) {
+      //add cost if clicked
+      totalCost += cost
+    } else {
+      //remove cost if unclicked
+      totalCost -= cost
+    }
+
+    //display updated total
+    activitiesCostDisplay.textContent = `Total: $${totalCost}`
+
+    //prevent schedule conflicts
+    activitiesCheckboxes.forEach((checkbox) => {
+      const checkboxTime = checkbox.getAttribute('data-day-and-time')
+
+      if (checkbox !== clicked && checkboxTime === clickedTime) {
+        if (clicked.checked) {
+          //disable conflicting checkbox
+          checkbox.disabled = true
+          checkbox.parentElement.classList.add('disabled')
+        } else {
+          //re-enable if no other checkbox with same time is still selected
+          const isConflictSelected = Array.from(activitiesCheckboxes).some(
+            (cb) => {
+              return (
+                cb !== checkbox &&
+                cb.checked &&
+                cb.getAttribute('data-day-and-time') == checkboxTime
+              )
+            }
+          )
+
+          if (!isConflictSelected) {
+            checkbox.disabled = false
+            checkbox.parentElement.classList.remove('disabled')
+          }
+        }
+      }
+    })
+  })
 
   // =====================
   // 5. Payment Info Section
