@@ -298,4 +298,15 @@ document.addEventListener('DOMContentLoaded', () => {
   // =====================
   // 8. Accessibility & UX Enhancements
   // =====================
+
+  //noticed when tabbing through activities checkboxes it's not adding or removing focus
+  activitiesCheckboxes.forEach((checkbox) => {
+    checkbox.addEventListener('focus', (e) => {
+      e.target.parentElement.classList.add('focus')
+    })
+
+    checkbox.addEventListener('blur', (e) => {
+      e.target.parentElement.classList.remove('focus')
+    })
+  })
 })
