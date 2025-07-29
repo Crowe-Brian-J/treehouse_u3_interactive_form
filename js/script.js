@@ -210,10 +210,16 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const clearError = (element) => {
-    element.classList.remove('error')
-    const hint = element.nextElementSibling
-    if (hint && hint.classList.contains('hint')) {
-      hint.style.display = 'none'
+    element.classList.remove('error-border')
+
+    if (element === activitiesFieldset) {
+      activitiesCostDisplay.classList.remove('error-border')
+      activitiesHint.style.display = 'none'
+    } else {
+      const hint = element.nextElementSibling
+      if (hint && hint.classList.contains('hint')) {
+        hint.style.display = 'none'
+      }
     }
   }
 
@@ -251,6 +257,38 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     //payment validation
+    if (paymentSelect.value === 'credit-card') {
+      //cc number 13-16 digits
+      const ccNumRegex = /^\d{13,16}$/
+      if (!ccNumRegex.test(ccNum.value.trim())) {
+        showError(ccNum)
+        isFormValid = false
+      } else {
+        clearError(ccNum)
+      }
+
+      //zipcode 5 digits
+      const zipRegex = /^\d{5}$/
+      if (!zipRegex.test(zip.value.trim())) {
+        showError(zip)
+        isFormValid = false
+      } else {
+        clearError(zip)
+      }
+
+      //cvv 3 digits
+      if (!cvvRegex.test(cvv.value.trim())) {
+        showError(cvv)
+        isFormValid = false
+      } else {
+        clearError(cvv)
+      }
+
+      //prevent form submission if invalid
+      if (!isFormValid) {
+        e.preventDefault()
+      }
+    }
   })
 
   // =====================
