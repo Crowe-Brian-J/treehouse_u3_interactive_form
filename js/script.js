@@ -134,7 +134,6 @@ document.addEventListener('DOMContentLoaded', () => {
           checkbox.disabled = true
           checkbox.parentElement.classList.add('disabled')
         } else {
-          //re-enable if no other checkbox with same time is still selected
           const isConflictSelected = Array.from(activitiesCheckboxes).some(
             (cb) => {
               return (
@@ -146,6 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
           )
 
           if (!isConflictSelected) {
+            //re-enable if no other checkbox with same time is still selected
             checkbox.disabled = false
             checkbox.parentElement.classList.remove('disabled')
           }
@@ -157,6 +157,38 @@ document.addEventListener('DOMContentLoaded', () => {
   // =====================
   // 5. Payment Info Section
   // =====================
+
+  //set cc as default payment option
+  paymentSelect.value = 'credit-card'
+
+  //show credit card section, hide Paypal and Bitcoin
+  creditCardDiv.style.display = 'block'
+  paypalDiv.style.display = 'none'
+  bitcoinDiv.style.display = 'none'
+
+  //listen for the changes
+  paymentSelect.addEventListener('change', (e) => {
+    const paymentMethod = e.target.value
+
+    if (paymentMethod === 'credit-card') {
+      creditCardDiv.style.display = 'block'
+      paypalDiv.style.display = 'none'
+      bitcoinDiv.style.display = 'none'
+    } else if (paymentMethod === 'paypal') {
+      creditCardDiv.style.display = 'none'
+      paypalDiv.style.display = 'block'
+      bitcoinDiv.style.display = 'none'
+    } else if (paymentMethod === 'bitcoin') {
+      creditCardDiv.style.display = 'none'
+      paypalDiv.style.display = 'none'
+      bitcoinDiv.style.display = 'block'
+    } else {
+      //in case someone selects the 'Select Payment Method' option
+      creditCardDiv.style.display = 'none'
+      paypalDiv.style.display = 'none'
+      bitcoinDiv.style.display = 'none'
+    }
+  })
 
   // =====================
   // 6. Form Validation (On Submit)
