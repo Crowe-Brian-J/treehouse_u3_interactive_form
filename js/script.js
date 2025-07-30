@@ -315,7 +315,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const isEmpty = required && value === ''
     const isInvalid = !regex.test(value)
 
-    const hint = input.nextElementSibling
+    //const hint = input.nextElementSibling
 
     /*     if (isEmpty || isInvalid) {
       input.classList.remove('valid-border')
