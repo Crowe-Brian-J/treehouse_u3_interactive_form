@@ -4,6 +4,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // Global Element Selectors
   // =====================
 
+  //TEMPORARY
+  /*   const parent = document.getElementById('name').parentElement
+  parent.classList.add('valid') */
+
   //form and basic fields
   const form = document.querySelector('form')
   const nameInput = document.getElementById('name')
@@ -194,8 +198,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //helper functions to show and clear errors
   const showError = (element) => {
+    //for adding iconography
+    const parent = element.closest('label') || element.parentElement
     //add error-border class to element and show hint message
+    element.classList.remove('valid-border')
     element.classList.add('error-border')
+    parent.classList.remove('valid')
+    parent.classList.add('not-valid')
 
     //determine if error element is in activities field
     if (element === activitiesFieldset) {
@@ -210,7 +219,12 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const clearError = (element) => {
+    //for adding iconography
+    const parent = element.closest('label') || element.parentElement
     element.classList.remove('error-border')
+    element.classList.add('valid-border')
+    parent.classList.remove('not-valid')
+    parent.classList.add('valid')
 
     if (element === activitiesFieldset) {
       activitiesCostDisplay.classList.remove('error-border')
@@ -303,16 +317,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const hint = input.nextElementSibling
 
-    if (isEmpty || isInvalid) {
+    /*     if (isEmpty || isInvalid) {
+      input.classList.remove('valid-border')
       input.classList.add('error-border')
       if (hint && hint.classList.contains('hint')) {
         hint.style.display = 'block'
       }
     } else {
       input.classList.remove('error-border')
+      input.classList.add('valid-border')
       if (hint && hint.classList.contains('hint')) {
         hint.style.display = 'none'
       }
+    } */
+
+    if (isEmpty || isInvalid) {
+      showError(input)
+      return false
+    } else {
+      clearError(input)
+      return true
     }
   }
 
