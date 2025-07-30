@@ -337,6 +337,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   })
 
+  //zipRegex
+  const zipRegex = /^\d{5}$/
+  //zip validation
+  zip.addEventListener('input', () => {
+    if (paymentSelect.value === 'credit-card') {
+      validateField(zip, zipRegex)
+    }
+  })
+
+  //cvvRegex
+  const cvvRegex = /^\d{3}$/
+  //cvv validation - possibly combine at some point?
+  cvv.addEventListener('input', () => {
+    if (paymentSelect.value === 'credit-card') {
+      validateField(cvv, cvvRegex)
+    }
+  })
+
   // =====================
   // 8. Accessibility & UX Enhancements
   // =====================
