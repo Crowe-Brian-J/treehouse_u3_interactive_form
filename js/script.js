@@ -295,6 +295,48 @@ document.addEventListener('DOMContentLoaded', () => {
   // 7. Real-Time Validation (Exceeds Expectations)
   // =====================
 
+  //validation helper function
+  const validateField = (input, regex = /.*/, required = true) => {
+    const value = input.value.trim()
+    const isEmpty = required && value === ''
+    const isInvalid = !regex.test(value)
+
+    const hint = input.nextElementSibling
+
+    if (isEmpty || isInvalid) {
+      input.classList.add('error-border')
+      if (hint && hint.classList.contains('hint')) {
+        hint.style.display = 'block'
+      }
+    } else {
+      input.classList.remove('error-border')
+      if (hint && hint.classList.contains('hint')) {
+        hint.style.display = 'none'
+      }
+    }
+  }
+
+  //check if name is deleted
+  nameInput.addEventListener('input', () => {
+    validateField(nameInput)
+  })
+
+  //check if emailRegex can be made more DRY
+  const emailRegex = /^[^@]+@[^@.]+\.[a-z]+$/i
+  //check email validation
+  emailInput.addEventListener('input', () => {
+    validateField(emailInput, emailRegex)
+  })
+
+  //ccNumRegex - again, check to make more DRY
+  const ccNumRegex = /^\d{13,16}$/
+  //check ccNum
+  ccNum.addEventListener('input', () => {
+    if (paymentSelect.value === 'credit-card') {
+      validateField(ccNum, ccNumRegex)
+    }
+  })
+
   // =====================
   // 8. Accessibility & UX Enhancements
   // =====================
