@@ -211,7 +211,10 @@ document.addEventListener('DOMContentLoaded', () => {
   //helper functions to show and clear errors
   const showError = (element) => {
     //for adding iconography
-    const parent = element.closest('label') || element.parentElement
+    const parent =
+      element === activitiesFieldset
+        ? activitiesFieldset.closest('.activities')
+        : element.closest('label') || element.parentElement
 
     //stop form from gaining an x
     if (parent === form) return
@@ -234,7 +237,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const clearError = (element) => {
     //for adding iconography - including to form
-    const parent = element.closest('label') || element.parentElement
+    const parent =
+      element === activitiesFieldset
+        ? activitiesFieldset.closest('.activities')
+        : element.closest('label') || element.parentElement
 
     //stop form from gaining a checkmark
     if (parent === form) return
@@ -302,11 +308,16 @@ document.addEventListener('DOMContentLoaded', () => {
         validateAndFlag(ccNum, validationPatterns.ccNum) &&
         validateAndFlag(zip, validationPatterns.zip) &&
         validateAndFlag(cvv, validationPatterns.cvv)
+    }
 
-      //prevent form submission if invalid
-      if (!isFormValid) {
-        e.preventDefault()
-      }
+    //prevent form submission if invalid
+    if (!isFormValid) {
+      e.preventDefault()
+    } else {
+      //prevent form submission, but refresh page on valid sumbission
+      e.preventDefault()
+      console.log('Form submitted successfully!')
+      form.reset()
     }
   })
 
