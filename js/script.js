@@ -288,27 +288,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //payment validation
     if (paymentSelect.value === 'credit-card') {
-      if (!validationPatterns.ccNum.test(ccNum.value.trim())) {
-        showError(ccNum)
-        isFormValid = false
-      } else {
-        clearError(ccNum)
-      }
-
-      if (!validationPatterns.zip.test(zip.value.trim())) {
-        showError(zip)
-        isFormValid = false
-      } else {
-        clearError(zip)
-      }
-
-      //cvv 3 digits
-      if (!validationPatterns.cvv.test(cvv.value.trim())) {
-        showError(cvv)
-        isFormValid = false
-      } else {
-        clearError(cvv)
-      }
+      //DRY up same calls
+      isFormValid &&=
+        validateAndFlag(ccNum, validationPatterns.ccNum) &&
+        validateAndFlag(zip, validationPatterns.zip) &&
+        validateAndFlag(cvv, validationPatterns.cvv)
 
       //prevent form submission if invalid
       if (!isFormValid) {
