@@ -45,6 +45,19 @@ document.addEventListener('DOMContentLoaded', () => {
     cvv: /^\d{3}$/
   }
 
+  //helper function to clear valid checks on page refresh
+  const clearValidations = () => {
+    const allInputs = form.querySelectorAll('input, select')
+    allInputs.forEach((el) => {
+      //didn't see error borders on valid submit, but in case
+      el.classList.remove('valid-border', 'error-border')
+      const parent = el.closest('label') || el.parentElement
+      parent?.classList.remove('valid', 'not-valid')
+    })
+    activitiesCostDisplay.classList.remove('error-border')
+    activitiesHint.style.display = 'none'
+  }
+
   // =====================
   // 1. Name Field Auto-Focus
   // =====================
@@ -188,8 +201,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  //show default payment selection on page load
-  showPaymentSection(paymentSelect.value)
+  //show default payment selection on page load - reload update
+  setTimeout(() => {
+    paymentSelect.selectedIndex = 1
+    showPaymentSection('credit-card')
+  }, 0)
 
   //listen for the changes
   paymentSelect.addEventListener('change', (e) => {
@@ -199,6 +215,40 @@ document.addEventListener('DOMContentLoaded', () => {
   // =====================
   // 6. Form Validation (On Submit)
   // =====================
+
+  //helper function to remove validation and reset page on valid sumbission
+  const validSumbission = () => {
+    //clear input data from form
+    form.reset()
+    //reset payment section
+    paymentSelect.value = 'credit-card'
+    showPaymentSection('credit-card')
+    //clear validations from user input
+    clearValidations()
+    //reset cost logic
+    totalCost = 0
+    activitiesCostDisplay.textContent = `Total: $${totalCost}`
+    //reset activities fieldset validation classes
+    activitiesFieldset.classList.remove(
+      'valid',
+      'not-valid',
+      'valid-border',
+      'error-border'
+    )
+    activitiesCostDisplay.classList.remove('error-border')
+    activitiesCheckboxes.forEach((checkbox) => {
+      //enable all checkboxes
+      checkbox.disabled = false
+      //remove disabled class from parent element
+      checkbox.parentElement.classList.remove('disabled')
+      //clear validation classes from parent
+      checkbox.parentElement.classList.remove('valid', 'not-valid')
+    })
+    //clear other job input if available
+    otherJobInput.style.display = 'none'
+    //set focus back to nameInput as intended
+    nameInput.focus()
+  }
 
   //helper function for hints
   const toggleHint = (element, show = true) => {
@@ -314,10 +364,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!isFormValid) {
       e.preventDefault()
     } else {
-      //prevent form submission, but refresh page on valid sumbission
+      //prevent form submission because we don't have a backend
       e.preventDefault()
-      console.log('Form submitted successfully!')
-      form.reset()
+      //call all logic to reset page because we don't have a backend
+      validSumbission()
     }
   })
 
