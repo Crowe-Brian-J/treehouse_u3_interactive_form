@@ -228,7 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const clearError = (element) => {
-    //for adding iconography
+    //for adding iconography - including to form
     const parent = element.closest('label') || element.parentElement
     element.classList.remove('error-border')
     element.classList.add('valid-border')
@@ -336,6 +336,32 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // DRY real-time validations
+  const inputValidations = [
+    { input: nameInput },
+    { input: emailInput, regex: validationPatterns.email },
+    {
+      input: ccNum,
+      regex: validationPatterns.ccNum,
+      condition: () => {
+        paymentSelect.value === 'credit-card'
+      }
+    },
+    {
+      input: zip,
+      regex: validationPatterns.zip,
+      condition: () => {
+        paymentSelect.value === 'credit-card'
+      }
+    },
+    {
+      input: cvv,
+      regex: validationPatterns.cvv,
+      condition: () => {
+        paymentSelect.value === 'credit-card'
+      }
+    }
+  ]
   //check if name is deleted
   nameInput.addEventListener('input', () => {
     validateField(nameInput)
