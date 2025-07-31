@@ -241,6 +241,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  //validateAndFlag helper function
+  const validateAndFlag = (input, regex) => {
+    if (!regex.test(input.value.trim())) {
+      showError(input)
+      return false
+    } else {
+      clearError(input)
+      return true
+    }
+  }
+
   form.addEventListener('submit', (e) => {
     //clear previous error states
     let isFormValid = true
