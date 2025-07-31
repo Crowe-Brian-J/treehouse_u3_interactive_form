@@ -4,10 +4,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // Global Element Selectors
   // =====================
 
-  //TEMPORARY
-  /*   const parent = document.getElementById('name').parentElement
-  parent.classList.add('valid') */
-
   //form and basic fields
   const form = document.querySelector('form')
   const nameInput = document.getElementById('name')
@@ -40,6 +36,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const ccNum = document.getElementById('cc-num')
   const zip = document.getElementById('zip')
   const cvv = document.getElementById('cvv')
+
+  //regex to DRY code
+  const validationPatterns = {
+    email: /^[^@]+@[^@.]+\.[a-z]+$/i,
+    ccNum: /^\d{13,16}$/,
+    zip: /^\d{5}$/,
+    cvv: /^\d{3}$/
+  }
 
   // =====================
   // 1. Name Field Auto-Focus
@@ -250,8 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     //email validation
-    const emailRegex = /^[^@]+@[^@.]+\.[a-z]+$/i
-    if (!emailRegex.test(emailInput.value.trim())) {
+    if (!validationPatterns.email.test(emailInput.value.trim())) {
       showError(emailInput)
       isFormValid = false
     } else {
@@ -272,18 +275,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //payment validation
     if (paymentSelect.value === 'credit-card') {
-      //cc number 13-16 digits
-      const ccNumRegex = /^\d{13,16}$/
-      if (!ccNumRegex.test(ccNum.value.trim())) {
+      if (!validationPatterns.ccNum.test(ccNum.value.trim())) {
         showError(ccNum)
         isFormValid = false
       } else {
         clearError(ccNum)
       }
 
-      //zipcode 5 digits
-      const zipRegex = /^\d{5}$/
-      if (!zipRegex.test(zip.value.trim())) {
+      if (!validationPatterns.zip.test(zip.value.trim())) {
         showError(zip)
         isFormValid = false
       } else {
@@ -291,7 +290,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       //cvv 3 digits
-      if (!cvvRegex.test(cvv.value.trim())) {
+      if (!validationPatterns.cvv.test(cvv.value.trim())) {
         showError(cvv)
         isFormValid = false
       } else {
@@ -315,22 +314,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const isEmpty = required && value === ''
     const isInvalid = !regex.test(value)
 
-    //const hint = input.nextElementSibling
-
-    /*     if (isEmpty || isInvalid) {
-      input.classList.remove('valid-border')
-      input.classList.add('error-border')
-      if (hint && hint.classList.contains('hint')) {
-        hint.style.display = 'block'
-      }
-    } else {
-      input.classList.remove('error-border')
-      input.classList.add('valid-border')
-      if (hint && hint.classList.contains('hint')) {
-        hint.style.display = 'none'
-      }
-    } */
-
     if (isEmpty || isInvalid) {
       showError(input)
       return false
@@ -345,37 +328,29 @@ document.addEventListener('DOMContentLoaded', () => {
     validateField(nameInput)
   })
 
-  //check if emailRegex can be made more DRY
-  const emailRegex = /^[^@]+@[^@.]+\.[a-z]+$/i
   //check email validation
   emailInput.addEventListener('input', () => {
-    validateField(emailInput, emailRegex)
+    validateField(emailInput, validationPatterns.email)
   })
 
-  //ccNumRegex - again, check to make more DRY
-  const ccNumRegex = /^\d{13,16}$/
   //check ccNum
   ccNum.addEventListener('input', () => {
     if (paymentSelect.value === 'credit-card') {
-      validateField(ccNum, ccNumRegex)
+      validateField(ccNum, validationPatterns.ccNum)
     }
   })
 
-  //zipRegex
-  const zipRegex = /^\d{5}$/
   //zip validation
   zip.addEventListener('input', () => {
     if (paymentSelect.value === 'credit-card') {
-      validateField(zip, zipRegex)
+      validateField(zip, validationPatterns.zip)
     }
   })
 
-  //cvvRegex
-  const cvvRegex = /^\d{3}$/
   //cvv validation - possibly combine at some point?
   cvv.addEventListener('input', () => {
     if (paymentSelect.value === 'credit-card') {
-      validateField(cvv, cvvRegex)
+      validateField(cvv, validationPatterns.cvv)
     }
   })
 
