@@ -343,54 +343,27 @@ document.addEventListener('DOMContentLoaded', () => {
     {
       input: ccNum,
       regex: validationPatterns.ccNum,
-      condition: () => {
-        paymentSelect.value === 'credit-card'
-      }
+      condition: () => paymentSelect.value === 'credit-card'
     },
     {
       input: zip,
       regex: validationPatterns.zip,
-      condition: () => {
-        paymentSelect.value === 'credit-card'
-      }
+      condition: () => paymentSelect.value === 'credit-card'
     },
     {
       input: cvv,
       regex: validationPatterns.cvv,
-      condition: () => {
-        paymentSelect.value === 'credit-card'
-      }
+      condition: () => paymentSelect.value === 'credit-card'
     }
   ]
-  //check if name is deleted
-  nameInput.addEventListener('input', () => {
-    validateField(nameInput)
-  })
 
-  //check email validation
-  emailInput.addEventListener('input', () => {
-    validateField(emailInput, validationPatterns.email)
-  })
-
-  //check ccNum
-  ccNum.addEventListener('input', () => {
-    if (paymentSelect.value === 'credit-card') {
-      validateField(ccNum, validationPatterns.ccNum)
-    }
-  })
-
-  //zip validation
-  zip.addEventListener('input', () => {
-    if (paymentSelect.value === 'credit-card') {
-      validateField(zip, validationPatterns.zip)
-    }
-  })
-
-  //cvv validation - possibly combine at some point?
-  cvv.addEventListener('input', () => {
-    if (paymentSelect.value === 'credit-card') {
-      validateField(cvv, validationPatterns.cvv)
-    }
+  //input validations loop
+  inputValidations.forEach(({ input, regex, condition }) => {
+    input.addEventListener('input', () => {
+      if (!condition || condition()) {
+        validateField(input, regex)
+      }
+    })
   })
 
   // =====================
