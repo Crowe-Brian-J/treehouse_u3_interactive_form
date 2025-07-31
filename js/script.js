@@ -217,7 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // =====================
 
   //helper function to remove validation and reset page on valid sumbission
-  const validSumbission = () => {
+  const validSubmission = () => {
     //clear input data from form
     form.reset()
     //reset payment section
@@ -260,7 +260,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //helper functions to show and clear errors
   const showError = (element) => {
-    //for adding iconography
     const parent =
       element === activitiesFieldset
         ? activitiesFieldset.closest('.activities')
@@ -268,8 +267,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //stop form from gaining an x
     if (parent === form) return
-
-    //add error-border class to element and show hint message
 
     element.classList.remove('valid-border')
     element.classList.add('error-border')
@@ -286,7 +283,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const clearError = (element) => {
-    //for adding iconography - including to form
     const parent =
       element === activitiesFieldset
         ? activitiesFieldset.closest('.activities')
@@ -367,7 +363,7 @@ document.addEventListener('DOMContentLoaded', () => {
       //prevent form submission because we don't have a backend
       e.preventDefault()
       //call all logic to reset page because we don't have a backend
-      validSumbission()
+      validSubmission()
     }
   })
 

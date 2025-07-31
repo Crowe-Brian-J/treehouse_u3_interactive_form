@@ -1,6 +1,121 @@
 # Interactive Form
 This is the project page for Treehouse's Fullstack JavaScript Tech Degree Unit 3's Interactive Form project. It involves HTML, CSS, and JavaScript. Processes will be documented below. Starting files were downloaded from Team Treehouse's website.
 
+## Form Validation
+All required fields, except the "Register for Activities" field, validate user input in real time as the user interacts with them.
+
+While I started with doing each field individually, making the code DRYer and easier to read led to me creating a validateField helper function that takes in the input of the field, the regex required for that field, if any, as well as a required boolean for if the user is expecting a credit card transaction.
+
+```javascript
+  const validateField = (input, regex = /.*/, required = true) => {
+    const value = input.value.trim()
+    const isEmpty = required && value === ''
+    const isInvalid = !regex.test(value)
+
+    if (isEmpty || isInvalid) {
+      showError(input)
+      return false
+    } else {
+      clearError(input)
+      return true
+    }
+  }
+```
+
+I then created an inputValidations array, so I could run a loop through the required input instead of writing each one out.
+
+```javascript
+  // DRY real-time validations
+  const inputValidations = [
+    { input: nameInput },
+    { input: emailInput, regex: validationPatterns.email },
+    {
+      input: ccNum,
+      regex: validationPatterns.ccNum,
+      condition: () => paymentSelect.value === 'credit-card'
+    },
+    {
+      input: zip,
+      regex: validationPatterns.zip,
+      condition: () => paymentSelect.value === 'credit-card'
+    },
+    {
+      input: cvv,
+      regex: validationPatterns.cvv,
+      condition: () => paymentSelect.value === 'credit-card'
+    }
+  ]
+
+  //input validations loop
+  inputValidations.forEach(({ input, regex, condition }) => {
+    input.addEventListener('input', () => {
+      if (!condition || condition()) {
+        validateField(input, regex)
+      }
+    })
+  })
+```
+
+In order to show and clear valid input, errors, and hints, I used logic I created to show them on submit:
+
+```javascript
+  //helper function for hints
+  const toggleHint = (element, show = true) => {
+    const hint = element.nextElementSibling
+    if (hint && hint.classList.contains('hint')) {
+      hint.style.display = show ? 'block' : 'none'
+    }
+  }
+
+  //helper function to show errors
+  const showError = (element) => {
+    const parent =
+      element === activitiesFieldset
+        ? activitiesFieldset.closest('.activities')
+        : element.closest('label') || element.parentElement
+
+    //stop form from gaining an x
+    if (parent === form) return
+
+    element.classList.remove('valid-border')
+    element.classList.add('error-border')
+    parent.classList.remove('valid')
+    parent.classList.add('not-valid')
+
+    if (element === activitiesFieldset) {
+      activitiesCostDisplay.classList.add('error-border')
+      activitiesHint.style.display = 'block'
+    } else {
+      toggleHint(element, true)
+    }
+  }
+
+  //helper function to clear errors on user correction
+  const clearError = (element) => {
+    const parent =
+      element === activitiesFieldset
+        ? activitiesFieldset.closest('.activities')
+        : element.closest('label') || element.parentElement
+
+    //stop form from gaining a checkmark
+    if (parent === form) return
+
+    element.classList.remove('error-border')
+    element.classList.add('valid-border')
+    parent.classList.remove('not-valid')
+    parent.classList.add('valid')
+
+    if (element === activitiesFieldset) {
+      activitiesCostDisplay.classList.remove('error-border')
+      activitiesHint.style.display = 'none'
+    } else {
+      toggleHint(element, false)
+    }
+  }
+```
+
+In particular, I thought the logic to assign the parent variable was pretty smart. It checks if the element is the activitiesFieldset (because this fieldset is structurally different than the text input fields) via a ternary operator. If true, it assigns parent: activitiesFieldset.closest('.activities'). If not, it assigns parent the closest label ancestor element; barring that, it assigns the direct parent element of element. That was gnarly to figure out. I can't wait to stop manipulating the DOM manually and dive into React.
+
 ## Grading
 *I'm submitting for exceeds expectations or needs work.*
 
