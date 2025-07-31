@@ -212,7 +212,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const showError = (element) => {
     //for adding iconography
     const parent = element.closest('label') || element.parentElement
+
+    //stop form from gaining an x
+    if (parent === form) return
+
     //add error-border class to element and show hint message
+
     element.classList.remove('valid-border')
     element.classList.add('error-border')
     parent.classList.remove('valid')
@@ -230,6 +235,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const clearError = (element) => {
     //for adding iconography - including to form
     const parent = element.closest('label') || element.parentElement
+
+    //stop form from gaining a checkmark
+    if (parent === form) return
+
     element.classList.remove('error-border')
     element.classList.add('valid-border')
     parent.classList.remove('not-valid')
