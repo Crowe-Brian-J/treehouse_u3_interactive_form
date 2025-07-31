@@ -200,6 +200,14 @@ document.addEventListener('DOMContentLoaded', () => {
   // 6. Form Validation (On Submit)
   // =====================
 
+  //helper function for hints
+  const toggleHint = (element, show = true) => {
+    const hint = element.nextElementSibling
+    if (hint && hint.classList.contains('hint')) {
+      hint.style.display = show ? 'block' : 'none'
+    }
+  }
+
   //helper functions to show and clear errors
   const showError = (element) => {
     //for adding iconography
@@ -215,10 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
       activitiesCostDisplay.classList.add('error-border')
       activitiesHint.style.display = 'block'
     } else {
-      const hint = element.nextElementSibling
-      if (hint && hint.classList.contains('hint')) {
-        hint.style.display = 'block'
-      }
+      toggleHint(element, true)
     }
   }
 
@@ -234,10 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
       activitiesCostDisplay.classList.remove('error-border')
       activitiesHint.style.display = 'none'
     } else {
-      const hint = element.nextElementSibling
-      if (hint && hint.classList.contains('hint')) {
-        hint.style.display = 'none'
-      }
+      toggleHint(element, false)
     }
   }
 
