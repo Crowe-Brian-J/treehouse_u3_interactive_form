@@ -318,18 +318,31 @@ document.addEventListener('DOMContentLoaded', () => {
   form.addEventListener('submit', (e) => {
     //clear previous error states
     let isFormValid = true
+    //track first invalid field
+    let firstInvalidField = null
 
     //name validation
     if (nameInput.value.trim() === '') {
       showError(nameInput)
+      if (!firstInvalidField) firstInvalidField = nameInput
       isFormValid = false
     } else {
       clearError(nameInput)
     }
 
-    //email validation
-    if (!validationPatterns.email.test(emailInput.value.trim())) {
+    //email validation - to coincide with changes to real-time validation
+    const emailValue = emailInput.value.trim()
+    const emailHint = emailInput.nextElementSibling
+
+    if (emailValue === '') {
+      emailHint.textContent = 'Email address cannot be blank'
       showError(emailInput)
+      if (!firstInvalidField) firstInvalidField = emailInput
+      isFormValid = false
+    } else if (!validationPatterns.email.test(emailValue)) {
+      emailHint.textContent = 'Email address must be formatted correctly'
+      showError(emailInput)
+      if (!firstInvalidField) firstInvalidField = emailInput
       isFormValid = false
     } else {
       clearError(emailInput)
@@ -342,6 +355,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!isActivityChecked) {
       showError(activitiesFieldset)
+      if (!firstInvalidField) firstInvalidField = activitiesFieldset
       isFormValid = false
     } else {
       clearError(activitiesFieldset)
@@ -359,6 +373,13 @@ document.addEventListener('DOMContentLoaded', () => {
     //prevent form submission if invalid
     if (!isFormValid) {
       e.preventDefault()
+      if (firstInvalidField) {
+        firstInvalidField.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        })
+        firstInvalidField.focus()
+      }
     } else {
       //prevent form submission because we don't have a backend
       e.preventDefault()
@@ -389,7 +410,20 @@ document.addEventListener('DOMContentLoaded', () => {
   // DRY real-time validations
   const inputValidations = [
     { input: nameInput },
-    { input: emailInput, regex: validationPatterns.email },
+    {
+      input: emailInput,
+      regex: validationPatterns.email,
+      condition: () => {
+        const value = emailInput.value.trim()
+        const hint = emailInput.nextElementSibling
+        if (value === '') {
+          hint.textContent = 'Email address cannot be blank'
+        } else {
+          hint.textContent = 'Email address must be formatted correctly'
+        }
+        return true
+      }
+    },
     {
       input: ccNum,
       regex: validationPatterns.ccNum,
