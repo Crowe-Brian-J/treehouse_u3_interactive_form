@@ -362,24 +362,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     //payment validation - and add focus update
-    if (!validateAndFlag(ccNum, validationPatterns.ccNum)) {
-      isFormValid = false
-      if (!firstInvalidField) {
-        firstInvalidField = ccNum
+    if (paymentSelect.value === 'credit-card') {
+      if (!validateAndFlag(ccNum, validationPatterns.ccNum)) {
+        isFormValid = false
+        if (!firstInvalidField) {
+          firstInvalidField = ccNum
+        }
       }
-    }
 
-    if (!validateAndFlag(zip, validationPatterns.zip)) {
-      isFormValid = false
-      if (!firstInvalidField) {
-        firstInvalidField = zip
+      if (!validateAndFlag(zip, validationPatterns.zip)) {
+        isFormValid = false
+        if (!firstInvalidField) {
+          firstInvalidField = zip
+        }
       }
-    }
 
-    if (!validateAndFlag(cvv, validationPatterns.cvv)) {
-      isFormValid = false
-      if (!firstInvalidField) {
-        firstInvalidField = cvv
+      if (!validateAndFlag(cvv, validationPatterns.cvv)) {
+        isFormValid = false
+        if (!firstInvalidField) {
+          firstInvalidField = cvv
+        }
       }
     }
 
