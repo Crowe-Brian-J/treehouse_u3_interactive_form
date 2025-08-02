@@ -361,13 +361,26 @@ document.addEventListener('DOMContentLoaded', () => {
       clearError(activitiesFieldset)
     }
 
-    //payment validation
-    if (paymentSelect.value === 'credit-card') {
-      //DRY up same calls
-      isFormValid &&=
-        validateAndFlag(ccNum, validationPatterns.ccNum) &&
-        validateAndFlag(zip, validationPatterns.zip) &&
-        validateAndFlag(cvv, validationPatterns.cvv)
+    //payment validation - and add focus update
+    if (!validateAndFlag(ccNum, validationPatterns.ccNum)) {
+      isFormValid = false
+      if (!firstInvalidField) {
+        firstInvalidField = ccNum
+      }
+    }
+
+    if (!validateAndFlag(zip, validationPatterns.zip)) {
+      isFormValid = false
+      if (!firstInvalidField) {
+        firstInvalidField = zip
+      }
+    }
+
+    if (!validateAndFlag(cvv, validationPatterns.cvv)) {
+      isFormValid = false
+      if (!firstInvalidField) {
+        firstInvalidField = cvv
+      }
     }
 
     //prevent form submission if invalid
